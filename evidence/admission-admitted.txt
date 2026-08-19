@@ -1,0 +1,4 @@
+--- hardened workload ---
+deployment.apps/hardened-app unchanged
+NAME           READY   UP-TO-DATE   AVAILABLE   AGE
+hardened-app   2/2     2            2           106s
