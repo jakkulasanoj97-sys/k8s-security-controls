@@ -1,0 +1,24 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: insecure-app
+  namespace: workloads
+  labels:
+    app: insecure-app
+spec:
+  containers:
+    - name: app
+      image: nginx:1.27
+      securityContext:
+        privileged: true                 # VIOLATION: privileged container
+        runAsUser: 0                      # VIOLATION: runs as root
+        allowPrivilegeEscalation: true    # VIOLATION
+      volumeMounts:
+        - name: host
+          mountPath: /host                # VIOLATION: hostPath mount
+      ports:
+        - containerPort: 80
+  volumes:
+    - name: host
+      hostPath:
+        path: /                           # VIOLATION: mounts node root filesystem

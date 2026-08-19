@@ -1,0 +1,14 @@
+# ANTI-PATTERN (do not apply): cluster-admin bound to an app service account.
+# Included as a review finding example - see docs/findings.md CTRL-K8S-RBAC-001.
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: bad-app-clusteradmin
+subjects:
+  - kind: ServiceAccount
+    name: hardened-app-sa
+    namespace: workloads
+roleRef:
+  kind: ClusterRole
+  name: cluster-admin        # VIOLATION: app SA must never be cluster-admin
+  apiGroup: rbac.authorization.k8s.io
