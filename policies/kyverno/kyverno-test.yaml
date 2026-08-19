@@ -1,0 +1,33 @@
+apiVersion: cli.kyverno.io/v1alpha1
+kind: Test
+metadata:
+  name: pod-security-controls
+policies:
+  - disallow-privileged.yaml
+  - require-non-root.yaml
+  - disallow-host-path.yaml
+  - require-resource-limits.yaml
+resources:
+  - ../../manifests/insecure/privileged-pod.yaml
+  - ../../manifests/secure/hardened-deployment.yaml
+results:
+  - policy: disallow-privileged-containers
+    rule: privileged-containers
+    resources: [insecure-app]
+    kind: Pod
+    result: fail
+  - policy: require-run-as-non-root
+    rule: run-as-non-root
+    resources: [insecure-app]
+    kind: Pod
+    result: fail
+  - policy: disallow-host-path
+    rule: host-path
+    resources: [insecure-app]
+    kind: Pod
+    result: fail
+  - policy: require-resource-limits
+    rule: resource-limits
+    resources: [insecure-app]
+    kind: Pod
+    result: fail
